@@ -133,8 +133,6 @@ public class FCRR extends LinearOpMode {
     // I rearranged this,  basically all I did was move the Mechanum instantiation to the beginning and added a sleep.
     // Making sure robot was completely still while pinpoint calibrated.
     MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-    //  Allow for calibration of pinpoint
-    //sleep(2000);
 
     Shooter shooter = new Shooter(hardwareMap);
     Intake intake = new Intake(hardwareMap);
@@ -145,9 +143,6 @@ public class FCRR extends LinearOpMode {
     Limelight3A camq = hardwareMap.get(Limelight3A.class, "limelight");
     Spin spin = new Spin(hardwareMap);
     spin.resetTimer();
-
-    TouchSensor leftLimit = hardwareMap.get(TouchSensor.class, "leftLimit");
-    TouchSensor rightLimit = hardwareMap.get(TouchSensor.class, "rightLimit");
 
     GoBildaPrismDriver prism = hardwareMap.get(GoBildaPrismDriver.class, "prism");
     DigitalChannel beambreak = hardwareMap.get(DigitalChannel.class, "beambreak");
@@ -161,83 +156,19 @@ public class FCRR extends LinearOpMode {
     List<Action> runningActions = new ArrayList<>();
 
     AtomicBoolean turretLock = new AtomicBoolean(false);
-    AtomicBoolean team = new AtomicBoolean(redTeam);
     AtomicInteger turretOffset = new AtomicInteger(0);
 
 
-    // Telemetry output in this thread only.
-    Thread turret = new Thread(() -> { // () -> {...} is a lambda expression
-      while(opModeIsActive())
-      {
-        if (Thread.currentThread().isInterrupted() || isStopRequested()) {
-          // Update using odometry then add return data to telemetry
-          /*if (camq.getLatestResult().isValid()) {
-            List vals = spin.camUpdate(camq.getLatestResult(), leftLimit.isPressed(), rightLimit.isPressed(), turretLock.get());
-            telemetry.addData("Turret data",
-                    "\nspinP (%.2f)" +
-                            "\nspinI (%.2f)" +
-                            "\nspinD (%.2f)" +
-                            "\nspin power (%.2f)",
-                    vals.toArray()
-            );
-            break;
-
-          } else {*/
-            List vals = spin.odomUpdate(drive, team.get(), turretOffset.get(), leftLimit.isPressed(), rightLimit.isPressed(), turretLock.get());
-            telemetry.addData("Turret data",
-                    "\nposX (%.2f)" +
-                            "\nposY (%.2f)" +
-                            "\ntargetX (%.2f)" +
-                            "\ntargetY (%.2f)" +
-                            "\nencoder pos (%.2f)" +
-                            "\nRobot Heading (%.2f)" +
-                            "\nCurrent angle (%.2f)" +
-                            "\nTarget angle (%.2f)" +
-                            "\nspin power (%.2f)",
-                    vals.toArray()
-            );
-            break;
-          //}
-        }
-
-        // Update using odometry then add return data to telemetry
-        /*if (camq.getLatestResult().isValid()) {
-          List vals = spin.camUpdate(camq.getLatestResult(), leftLimit.isPressed(), rightLimit.isPressed(), turretLock.get());
-          telemetry.addData("Turret data",
-                  "\nspinP (%.2f)" +
-                          "\nspinI (%.2f)" +
-                          "\nspinD (%.2f)" +
-                          "\nspin power (%.2f)",
-                  vals.toArray()
-          );
-        } else {*/
-          List vals = spin.odomUpdate(drive, team.get(), turretOffset.get(), leftLimit.isPressed(), rightLimit.isPressed(), turretLock.get());
-          telemetry.addData("Turret data",
-                  "\nposX (%.2f)" +
-                          "\nposY (%.2f)" +
-                          "\ntargetX (%.2f)" +
-                          "\ntargetY (%.2f)" +
-                          "\nencoder pos (%.2f)" +
-                          "\nRobot Heading (%.2f)" +
-                          "\nCurrent angle (%.2f)" +
-                          "\nTarget angle (%.2f)" +
-                          "\nspin power (%.2f)",
-                  vals.toArray()
-          );
-        //}
-        telemetry.update();
-      }
-    });
-
+    prism.enableDefaultBootArtboard(false);
+    PrismAnimations.Solid solid = new PrismAnimations.Solid();
+    solid.setPrimaryColor(0, 0, 0);
+    solid.setBrightness(0);
+    prism.clearAllAnimations();
+    prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solid);
 
     Thread Prism = new Thread(() -> {
-      prism.enableDefaultBootArtboard(false); // Disable flashy boot animation lights (to conform with rules)
-      PrismAnimations.Solid solid = new PrismAnimations.Solid();
       TelemetryPacket packet = new TelemetryPacket();
-      prism.clearAllAnimations();
-      solid.setPrimaryColor(0, 0, 0);
-      solid.setBrightness(0);
-      prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, solid);
+
       boolean laststate = false;
       while (opModeIsActive()) {
         if (isStopRequested()) {break;}
@@ -259,24 +190,13 @@ public class FCRR extends LinearOpMode {
     });
 
 
-
-    Actions.runBlocking(new ParallelAction(
-            shooter.stop(),
-            pew.set(),
-            intake.off(),
-            angle.close(),
-            stopper.Out()
-    ));
-
-
     telemetry.update();
 
 
     /*=======================================WAIT FOR START=======================================*/
     waitForStart();
 
-    turret.start(); // start the turret thread
-    Prism.start();
+
 
     runtime.reset();
     spin.resetTimer();
@@ -320,7 +240,7 @@ public class FCRR extends LinearOpMode {
       turn = -gamepad1.right_stick_x;
 
 
-      // DPAD_DOWN button -> Fine tuning mode
+      // DPAD_DOWN button -> Fine-tuning mode
       if ((gamepad1.dpad_down) && !changed) {
         slow = !slow;
         changed = true;
@@ -539,10 +459,6 @@ public class FCRR extends LinearOpMode {
     telemetry.update();
 
 
-    if (isStopRequested()) {
-      Prism.interrupt();
-      turret.interrupt();
-    }
   }
 
 }
