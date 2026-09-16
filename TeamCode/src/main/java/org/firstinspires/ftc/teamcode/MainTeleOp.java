@@ -112,17 +112,18 @@ public class MainTeleOp extends LinearOpMode {
      * ONLY USE VARIABLES AND LOGIC HERE
      */
 
+      if (!gp1_atRest) {
+
+      }
+      if (!gp2_atRest) {
+
+      }
+
       double heading = drive.localizer.getPose().heading.toDouble();
       double newDriveVar = strafe * Math.cos(heading) - driveVar * Math.sin(heading);
       double newStrafe = strafe * Math.sin(heading) + driveVar * Math.cos(heading);
 
-      movement = new PoseVelocity2d(
-              new Vector2d(
-                      newStrafe,
-                      newDriveVar
-              ),
-              turn
-      );
+      movement = new PoseVelocity2d(new Vector2d(newStrafe, newDriveVar), turn);
 
       // --- OUTPUT ---
       /* Output is where we set all the motor powers and write to telemetry
