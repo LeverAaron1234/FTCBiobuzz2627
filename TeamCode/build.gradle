@@ -1,3 +1,5 @@
+apply plugin: 'com.android.application'
+
 //
 // build.gradle in TeamCode
 //
@@ -31,6 +33,7 @@ repositories {
         url = 'https://maven.brott.dev/'
     }
 }
+
 dependencies {
     implementation project(':FtcRobotController')
     implementation "com.acmerobotics.roadrunner:ftc:0.1.25"
