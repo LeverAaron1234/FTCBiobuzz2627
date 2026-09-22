@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.appendages.Stopper;
 
 
 
-@Autonomous(preselectTeleOp = "FCRR")
+@Autonomous(preselectTeleOp = "MainTeleOp")
 public final class MainAuto extends LinearOpMode {
 
     /// --- Setup for a config loop ---
