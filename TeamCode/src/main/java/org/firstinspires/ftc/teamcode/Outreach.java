@@ -343,19 +343,19 @@ public class Outreach extends LinearOpMode {
       }
 
       /// Flywheel
-      if (gamepad2.right_trigger >= 0.2) {
+      if (gamepad1.right_trigger >= 0.2) {
         wheeelSpeed = Math.max(wheeelSpeed + 0.01, 1);
       }
-      if (gamepad2.left_trigger >= 0.2) {
+      if (gamepad1.left_trigger >= 0.2) {
         wheeelSpeed = Math.min(wheeelSpeed - 0.01, 0);
       }
 
       /// Angle / Hood
-      if (gamepad2.right_bumper) {
+      if (gamepad1.right_bumper) {
         anglePos = Math.max(anglePos + 0.01, 1);
       }
 
-      if (gamepad2.left_bumper) {
+      if (gamepad1.left_bumper) {
         anglePos = Math.min(anglePos - 0.01, 0);
       }
 
@@ -376,11 +376,11 @@ public class Outreach extends LinearOpMode {
         wheeelSpeed = 0.0;
       }
 
-      if (gamepad2.dpad_left) {
+      if (gamepad1.dpad_left) {
         turretOffset.set(turretOffset.get()-1);
       }
 
-      if (gamepad2.dpad_right) {
+      if (gamepad1.dpad_right) {
         turretOffset.set(turretOffset.get()+1);
       }
 
