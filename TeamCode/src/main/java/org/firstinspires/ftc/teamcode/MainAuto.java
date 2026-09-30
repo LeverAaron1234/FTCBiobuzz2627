@@ -186,6 +186,12 @@ public final class MainAuto extends LinearOpMode {
                 telemetry.addLine(":( :( :( :( :( :( :(");
                 telemetry.update();
         }
+        Actions.runBlocking(drive.actionBuilder(new Pose2d(0,0,0))
+                .strafeTo(new Vector2d(0, 42))
+                .build()
+        );
+        telemetry.addData("Runtime:", getRuntime());
+        telemetry.update();
 
 
 
