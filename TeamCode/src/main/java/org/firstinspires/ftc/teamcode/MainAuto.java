@@ -13,6 +13,7 @@ import com.pedropathing.math.Pose;
 import com.pedropathing.paths.interpolator.Interpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
@@ -137,7 +138,7 @@ public final class MainAuto extends OpMode {
     public void init() {
         /// --- To add an auto: ---
         /// 1. Add name and description to enum
-        /// 2. Paste poses and paths (all uniquely named and GROUPED into ONE path)
+        /// 2. Paste poses and paths (all uniquely named and GROUPED into ONE path);
         /// 3. Add a line here. Template: starts.add(newStart);paths.add(newPath);
         ArrayList<Pose> starts = new ArrayList<>();
         ArrayList<Path> paths = new ArrayList<>();
@@ -191,6 +192,10 @@ public final class MainAuto extends OpMode {
     @Override
     public void start() {
 
+        if (chosenAuto == null) {
+            chosenAuto = Autos.values()[cursorPos];
+        }
+
         Scheduler.reset();
         follower = Constants.create(hardwareMap);
         follower.setPose(chosenAuto.getStart());
@@ -205,6 +210,11 @@ public final class MainAuto extends OpMode {
         Scheduler.execute();
         telemetry.addData("Time elapsed:", getRuntime());
         telemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        RobotPose.lastRobotPose = follower.pose();
     }
 
 }

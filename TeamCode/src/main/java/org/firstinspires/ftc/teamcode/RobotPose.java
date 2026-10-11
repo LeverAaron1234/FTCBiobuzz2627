@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.roadrunner.Pose2d;
+import com.pedropathing.math.Pose;
 
 public class RobotPose {
     /// Stores the robot pose from autonomous, which is read in teleop.
-    public static Pose2d lastRobotPose = null;
+    public static Pose lastRobotPose = null;
 
 
     /// Stores any settings for the robot

@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -23,12 +24,20 @@ public class MainTeleOp extends LinearOpMode {
 
   private final ElapsedTime runtime = new ElapsedTime();
 
+  private List<LynxModule> allHubs;
+
   @Override
   public void runOpMode() {
 
     /*=======================================INITIALIZATION=======================================*/
 
     // --- Variables ---
+
+    allHubs = hardwareMap.getAll(LynxModule.class);
+
+    for (LynxModule module : allHubs) {
+      module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+    }
 
     // Positions
     Pose2d beginPose = new Pose2d(0,0,0);
@@ -98,13 +107,16 @@ public class MainTeleOp extends LinearOpMode {
   /* Input is where we bulk read all of our sensors and gamepads
    * DO NOT put any hardware writes or calculations here, for my sanity, and the robot's cycle time
    */
+      for (LynxModule module : allHubs) {
+        module.clearBulkCache();
+      }
+
+
       TelemetryPacket packet = new TelemetryPacket();
       driveVar = gamepad1.left_stick_x;
       strafe = gamepad1.left_stick_y;
       turn = -gamepad1.right_stick_x;
 
-      boolean gp1_atRest = gamepad1.atRest();
-      boolean gp2_atRest = gamepad2.atRest();
 
 
       // --- CALCULATIONS ---
@@ -112,12 +124,7 @@ public class MainTeleOp extends LinearOpMode {
      * ONLY USE VARIABLES AND LOGIC HERE
      */
 
-      if (!gp1_atRest) {
 
-      }
-      if (!gp2_atRest) {
-
-      }
 
       double heading = drive.localizer.getPose().heading.toDouble();
       double newDriveVar = strafe * Math.cos(heading) - driveVar * Math.sin(heading);

@@ -119,7 +119,7 @@ public class FCRR extends LinearOpMode {
     telemetry.update();
 
     if (RobotPose.updated) {
-      beginPose = RobotPose.lastRobotPose;
+      beginPose = new Pose2d(RobotPose.lastRobotPose.x(), RobotPose.lastRobotPose.y(), RobotPose.lastRobotPose.heading());
       beginPoseValid = true;
     } else {
       if (startFar) {

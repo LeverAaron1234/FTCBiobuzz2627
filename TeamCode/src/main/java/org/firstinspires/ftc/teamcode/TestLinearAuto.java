@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.pedropathing.api.PoseFactory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -187,9 +188,8 @@ public final class TestLinearAuto extends LinearOpMode {
         telemetry.update();
 
 
-
-
-        RobotPose.lastRobotPose = drive.localizer.getPose(); // update the robot pose
+        PoseFactory poseFactory = PoseFactory.degrees();
+        RobotPose.lastRobotPose = poseFactory.of(drive.localizer.getPose().position.x,drive.localizer.getPose().position.y,Math.toDegrees(drive.localizer.getPose().heading.toDouble())); // update the robot pose
         RobotPose.redTeam = false;
         RobotPose.updated = true; // tell the updated pose that it was changed, because yes.
     }

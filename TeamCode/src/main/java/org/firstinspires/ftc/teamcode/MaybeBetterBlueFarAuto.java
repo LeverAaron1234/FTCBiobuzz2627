@@ -8,6 +8,8 @@ import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.pedropathing.api.PoseFactory;
+import com.pedropathing.math.Pose;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -246,7 +248,8 @@ public final class MaybeBetterBlueFarAuto extends LinearOpMode {
 
         thread.interrupt(); // make sure that the thread isn't running anymore, we don't need it.
 
-        RobotPose.lastRobotPose = drive.localizer.getPose(); // update the robot pose
+        PoseFactory poseFactory = PoseFactory.degrees();
+        RobotPose.lastRobotPose = poseFactory.of(drive.localizer.getPose().position.x,drive.localizer.getPose().position.y,Math.toDegrees(drive.localizer.getPose().heading.toDouble())); // update the robot pose
         RobotPose.updated = true; // tell the updated pose that it was changed, because yes.
 }
 
