@@ -15,6 +15,7 @@ import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.ivy.commands.Commands;
 import com.pedropathing.ivy.pedro.PedroCommands;
+import com.pedropathing.math.Pose;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -40,8 +41,8 @@ public class TestTeleOp extends OpMode {
   private Follower follower;
 
   // Positions
-  Pose2d beginPose = new Pose2d(0, 0, 0);
-  PoseVelocity2d movement = null;
+  // Pose2d beginPose = new Pose2d(0, 0, 0);
+  // PoseVelocity2d movement = null;
 
   // Driving variables
   double driveVar;
@@ -53,11 +54,6 @@ public class TestTeleOp extends OpMode {
 
   // --- Motors / Servos / Sensors ---
 
-  // Drive
-  MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-
-  // Camera
-  Limelight3A camq = hardwareMap.get(Limelight3A.class, "limelight");
 
   // Dashboard
   FtcDashboard dash = FtcDashboard.getInstance();
@@ -68,6 +64,12 @@ public class TestTeleOp extends OpMode {
   @Override
   public void init() {
     /*=======================================INITIALIZATION=======================================*/
+
+    // Drive
+    //MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+
+    // Camera
+    Limelight3A camq = hardwareMap.get(Limelight3A.class, "limelight");
 
     // --- Variables ---
 
@@ -106,12 +108,13 @@ public class TestTeleOp extends OpMode {
     // Command building
     Command test = Command.build()
             .setExecute(() -> telemetry.addLine("Executing..."))
-            .setDone(() -> !gamepad1.aWasPressed())
+            .setDone(() -> gamepad1.aWasPressed())
             .setEnd(endCondition -> telemetry.addLine("Done!"));
 
     // Commands class (specifically instant())
     Command infinite = Commands.infinite(() -> telemetry.addLine("Wheeeeeeeeeeeeeeeeeeeee..."));
     Command instantTest = Commands.instant(() -> telemetry.addLine("Instant!"));
+
 
     Scheduler.schedule(sequential(
         test,
@@ -123,13 +126,16 @@ public class TestTeleOp extends OpMode {
   }
 
 
-
   /*=======================================WAIT FOR START=======================================*/
 
 
   @Override
   public void start() {
-    follower.setPose(RobotPose.lastRobotPose);
+    if (RobotPose.lastRobotPose == null) {
+      follower.setPose(new Pose(0,0));
+    } else {
+      follower.setPose(RobotPose.lastRobotPose);
+    }
     follower.update();
     runtime.reset();
   }
