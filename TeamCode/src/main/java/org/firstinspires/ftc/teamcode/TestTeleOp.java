@@ -21,6 +21,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -40,9 +41,6 @@ public class TestTeleOp extends OpMode {
 
   private Follower follower;
 
-  // Positions
-  // Pose2d beginPose = new Pose2d(0, 0, 0);
-  // PoseVelocity2d movement = null;
 
   // Driving variables
   double driveVar;
@@ -54,9 +52,14 @@ public class TestTeleOp extends OpMode {
 
   // --- Motors / Servos / Sensors ---
 
+  DcMotorEx intake;
+  DcMotorEx pollenShooter;
+  DcMotorEx NectarShooter;
+
 
   // Dashboard
   FtcDashboard dash = FtcDashboard.getInstance();
+  TelemetryPacket packet = new TelemetryPacket();
 
   // Roadrunner Actions list queue
   List<Action> runningActions = new ArrayList<>();

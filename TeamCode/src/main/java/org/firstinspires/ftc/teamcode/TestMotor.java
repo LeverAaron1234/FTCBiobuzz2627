@@ -6,13 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp
-@Disabled
 public class TestMotor extends LinearOpMode {
 
     @Override
     public void runOpMode() {
 
-        DcMotor motor = hardwareMap.get(DcMotor.class, "motor");
+        DcMotor motor = hardwareMap.get(DcMotor.class, "intake");
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         telemetry.addLine("Ready (click START)");
