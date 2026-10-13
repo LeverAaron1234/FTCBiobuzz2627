@@ -11,7 +11,7 @@ public class TestMotor extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        DcMotor motor = hardwareMap.get(DcMotor.class, "intake");
+        DcMotor motor = hardwareMap.get(DcMotor.class, "flywheel");
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         telemetry.addLine("Ready (click START)");
