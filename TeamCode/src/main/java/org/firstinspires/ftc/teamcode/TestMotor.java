@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @TeleOp
 public class TestMotor extends LinearOpMode {
@@ -11,8 +12,9 @@ public class TestMotor extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        DcMotor motor = hardwareMap.get(DcMotor.class, "flywheel");
-        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        DcMotorEx motor = hardwareMap.get(DcMotorEx.class, "flywheel");
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         telemetry.addLine("Ready (click START)");
         telemetry.update();
@@ -40,7 +42,7 @@ public class TestMotor extends LinearOpMode {
 
             speed = Math.min(Math.max(speed,-1.0),1.0);
             stepSize = (int) Math.min(Math.max(stepSize,1.0),10.0);
-            motor.setPower(speed);
+            motor.setVelocity(speed * 2800);
             telemetry.addData("Motor Speed", speed);
             telemetry.addData("Step Size", stepSize / 100.0);
             telemetry.update();
