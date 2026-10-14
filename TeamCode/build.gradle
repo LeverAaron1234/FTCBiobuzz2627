@@ -51,10 +51,10 @@ repositories {
 
 dependencies {
     implementation project(':FtcRobotController')
-    // Sloth dashboard
+    // Sloth dashboard (see repo in build.dependencies.gradle)
     implementation 'com.acmerobotics.slothboard:dashboard:0.3.2+0.6.0'
     implementation "com.bylazar.sloth:fullpanels:0.3.2+1.0.13"
-    // roadrunner
+    // roadrunner (https://rr.brott.dev/docs/v1-0/installation/)
     implementation ("com.acmerobotics.roadrunner:ftc:0.1.25") {
         exclude group: "com.acmerobotics.dashboard"
     }
@@ -63,5 +63,6 @@ dependencies {
     }
 
     implementation "com.acmerobotics.roadrunner:core:1.0.1"
-    //implementation "com.acmerobotics.dashboard:dashboard:0.5.1"
+    // Removed "com.acmerobotics.dashboard:dashboard:0.5.1" due to duplicate classes with Sloth.
+    // Roadrunner *should* still work.
 }

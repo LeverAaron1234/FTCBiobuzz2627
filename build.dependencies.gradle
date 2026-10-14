@@ -15,10 +15,12 @@ dependencies {
     implementation 'org.firstinspires.ftc:Vision:12.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
+    // https://pedropathing.com/docs/pathing/installation
     implementation 'com.pedropathing.ivy:pedro:1.1.1'
     implementation 'com.pedropathing:revhub:3.0.1'
     implementation 'com.pedropathing:tuning:1.0.1'
 
+    // https://github.com/Dairy-Foundation/Sloth
     implementation 'dev.frozenmilk.sinister:Sloth:0.3.2'
 }
 
