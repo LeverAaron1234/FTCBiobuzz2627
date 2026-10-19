@@ -53,7 +53,25 @@ dependencies {
     implementation project(':FtcRobotController')
     // Sloth dashboard (see repo in build.dependencies.gradle)
     implementation 'com.acmerobotics.slothboard:dashboard:0.3.2+0.6.0'
-    implementation "com.bylazar.sloth:fullpanels:0.3.2+1.0.13"
+
+    // implementation "com.bylazar.sloth:fullpanels:0.3.2+1.0.13"
+    implementation "com.bylazar.sloth:battery:0.3.2+1.0.3"
+    implementation "com.bylazar.sloth:camerastream:0.3.2+1.0.0"
+    implementation "com.bylazar.sloth:capture:0.3.2+1.0.3"
+    implementation "com.bylazar.sloth:configurables:0.3.2+1.0.5"
+    implementation "com.bylazar.sloth:docs:0.3.2+1.0.5"
+    implementation "com.bylazar.sloth:field:0.3.2+1.0.7"
+    implementation "com.bylazar.sloth:gamepad:0.3.2+1.0.4"
+    implementation "com.bylazar.sloth:graph:0.3.2+1.0.4"
+    implementation "com.bylazar.sloth:lights:0.3.2+1.0.3"
+    implementation "com.bylazar.sloth:opmodecontrol:0.3.2+1.0.3"
+    implementation "com.bylazar.sloth:panels:0.3.2+1.0.5"
+    implementation "com.bylazar.sloth:pinger:0.3.2+1.0.3"
+    implementation "com.bylazar.sloth:telemetry:0.3.2+1.0.5"
+    implementation "com.bylazar.sloth:themes:0.3.2+1.0.3"
+    implementation "com.bylazar.sloth:utils:0.3.2+1.0.4"
+
+
     // roadrunner (https://rr.brott.dev/docs/v1-0/installation/)
     implementation ("com.acmerobotics.roadrunner:ftc:0.1.25") {
         exclude group: "com.acmerobotics.dashboard"
