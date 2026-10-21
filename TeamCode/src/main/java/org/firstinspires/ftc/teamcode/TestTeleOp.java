@@ -158,8 +158,8 @@ public class TestTeleOp extends OpMode {
 
 
     TelemetryPacket packet = new TelemetryPacket();
-    driveVar = gamepad1.left_stick_x;
-    strafe = gamepad1.left_stick_y;
+    driveVar = -gamepad1.left_stick_y;
+    strafe = -gamepad1.left_stick_x;
     turn = -gamepad1.right_stick_x;
 
     follower.update();
