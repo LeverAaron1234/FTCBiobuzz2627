@@ -69,8 +69,8 @@ class Shooter(hardwareMap: HardwareMap) {
             if (!initialized) {
                 targetPower = state
 
-                shooter1.velocity = (targetPower*2800)/2
-                shooter2.velocity = (targetPower*2800)/2
+                shooter1.velocity = (targetPower*2800)
+                shooter2.velocity = (targetPower*2800)
 
                 initialized = true
             }

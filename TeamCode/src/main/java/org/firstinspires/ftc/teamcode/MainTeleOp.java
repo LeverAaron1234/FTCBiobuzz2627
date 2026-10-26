@@ -22,6 +22,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Prism.GoBildaPrismDriver;
 import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
+import org.firstinspires.ftc.teamcode.appendages.Shooter;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 import java.util.ArrayList;
@@ -46,11 +47,12 @@ public class MainTeleOp extends OpMode {
 
 
   // --- Motors / Servos / Sensors ---
-
   DcMotorEx intake;
   DcMotorEx pollenShooter;
-  DcMotorEx NectarShooter;
+  DcMotorEx nectarShooter;
 
+  // Camera
+  Limelight3A camq;
 
   // Dashboard
   FtcDashboard dash = FtcDashboard.getInstance();
@@ -65,6 +67,11 @@ public class MainTeleOp extends OpMode {
 
     // Drive
     //MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+
+    // --- Motors / Servos / Sensors ---
+    DcMotorEx intake = hardwareMap.get(DcMotorEx.class, "intake");
+    DcMotorEx pollenShooter = hardwareMap.get(DcMotorEx.class, "pollen");
+    DcMotorEx nectarShooter = hardwareMap.get(DcMotorEx.class, "nectar");
 
     // Camera
     Limelight3A camq = hardwareMap.get(Limelight3A.class, "limelight");
@@ -151,6 +158,19 @@ public class MainTeleOp extends OpMode {
       module.clearBulkCache();
     }
 
+    if (gamepad1.right_trigger >= 0.2) {
+      pollenShooter.setVelocity(2800.0);
+    }
+    else {
+      pollenShooter.setVelocity(0.0);
+    }
+
+    if (gamepad1.left_trigger >= 0.2) {
+      nectarShooter.setVelocity(2800.0);
+    }
+    else {
+      nectarShooter.setVelocity(0.0);
+    }
 
     TelemetryPacket packet = new TelemetryPacket();
     driveVar = -gamepad1.left_stick_y;
@@ -158,7 +178,7 @@ public class MainTeleOp extends OpMode {
     turn = -gamepad1.right_stick_x;
 
     follower.update();
-    Scheduler.execute();
+    Scheduler.execute(); // Off with his head!
 
 
     // --- CALCULATIONS ---
