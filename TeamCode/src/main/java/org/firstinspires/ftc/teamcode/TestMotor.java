@@ -1,21 +1,37 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import org.firstinspires.ftc.teamcode.levisToolbox.TelemetrySelector;
+
+import java.util.List;
 
 @TeleOp
 public class TestMotor extends LinearOpMode {
 
+    private List<LynxModule> allHubs;
+
     @Override
     public void runOpMode() {
 
-        DcMotorEx motor = hardwareMap.get(DcMotorEx.class, "flywheel");
-        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        allHubs = hardwareMap.getAll(LynxModule.class);
+        for (LynxModule module : allHubs) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
+        //try {
+        //    TelemetrySelector t = new TelemetrySelector(telemetry);
+        //} catch (Exception e) {}
+        DcMotorEx motor = hardwareMap.get(DcMotorEx.class, "leftFly");
+        //DcMotorEx motor2 = hardwareMap.get(DcMotorEx.class, "rightFly");
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor.setDirection(DcMotorSimple.Direction.FORWARD);
         telemetry.addLine("Ready (click START)");
         telemetry.update();
 
@@ -24,9 +40,15 @@ public class TestMotor extends LinearOpMode {
         telemetry.update();
 
 
+
         double speed = 0.0;
         int stepSize = 10;
+
         while (opModeIsActive()) {
+            for (LynxModule module : allHubs) {
+                module.clearBulkCache();
+            }
+
             if (gamepad1.aWasPressed()) {
                 stepSize--;
             }
@@ -44,6 +66,9 @@ public class TestMotor extends LinearOpMode {
             stepSize = (int) Math.min(Math.max(stepSize,1.0),10.0);
             motor.setVelocity(speed * 2800);
             telemetry.addData("Motor Speed", speed);
+            telemetry.addData("Motor Power", motor.getPower());
+            telemetry.addData("Motor Velocity", motor.getVelocity());
+            telemetry.addData("Tick count", motor.getCurrentPosition());
             telemetry.addData("Step Size", stepSize / 100.0);
             telemetry.update();
         }
