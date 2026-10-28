@@ -45,6 +45,8 @@ public class MainTeleOp extends OpMode {
 
   // Temporary variables
 
+  double pollenShooterVelocity;
+  double nectarShooterVelocity;
 
   // --- Motors / Servos / Sensors ---
   DcMotorEx intake;
@@ -77,6 +79,9 @@ public class MainTeleOp extends OpMode {
     Limelight3A camq = hardwareMap.get(Limelight3A.class, "limelight");
 
     // --- Variables ---
+
+    pollenShooterVelocity = 0.0;
+    nectarShooterVelocity = 0.0;
 
     allHubs = hardwareMap.getAll(LynxModule.class);
 
@@ -158,18 +163,20 @@ public class MainTeleOp extends OpMode {
       module.clearBulkCache();
     }
 
-    if (gamepad1.right_trigger >= 0.2) {
-      pollenShooter.setVelocity(2800.0);
-    }
-    else {
-      pollenShooter.setVelocity(0.0);
+    if (gamepad1.dpadUpWasPressed()) {
+      pollenShooterVelocity = Math.min(pollenShooterVelocity + 200, 2800.0);
     }
 
-    if (gamepad1.left_trigger >= 0.2) {
-      nectarShooter.setVelocity(2800.0);
+    if (gamepad1.dpadDownWasPressed()) {
+      pollenShooterVelocity = Math.max(pollenShooterVelocity - 200, 0.0);
     }
-    else {
-      nectarShooter.setVelocity(0.0);
+
+    if (gamepad1.dpadRightWasPressed()) {
+      nectarShooterVelocity = Math.min(pollenShooterVelocity + 200, 2800.0);
+    }
+
+    if (gamepad1.dpadLeftWasPressed()) {
+      nectarShooterVelocity = Math.max(pollenShooterVelocity - 200, 0.0);
     }
 
     TelemetryPacket packet = new TelemetryPacket();
@@ -200,6 +207,9 @@ public class MainTeleOp extends OpMode {
    */
 
     ManualDrive.driveOrHold(follower, powers);
+
+    pollenShooter.setVelocity(pollenShooterVelocity);
+    nectarShooter.setVelocity(nectarShooterVelocity);
 
 
     // Debug stuff (please ignore)
