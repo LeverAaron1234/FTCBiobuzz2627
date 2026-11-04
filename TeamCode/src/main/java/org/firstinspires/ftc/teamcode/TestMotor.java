@@ -154,8 +154,8 @@ public class TestMotor extends LinearOpMode {
             packet.put("kD", String.format(Locale.ENGLISH,".%2f",kD));
             packet.put("kFf", String.format(Locale.ENGLISH,".%2f",kFf));
              */
-            packet.put("Motor target RPM", String.format(Locale.ENGLISH,".%2f",(Math.abs(speed) * 2800) * 60/28.0));
-            packet.put("Motor Velocity in RPM", String.format(Locale.ENGLISH,".%2f",motor.getVelocity() * 60/28.0));
+            packet.put("Motor target RPM", String.format(Locale.ENGLISH,"%2f",(speed * 2800) * 60/28.0));
+            packet.put("Motor Velocity in RPM", String.format(Locale.ENGLISH,"%2f",motor.getVelocity() * 60/28.0));
             dashboard.sendTelemetryPacket(packet);
 
 
