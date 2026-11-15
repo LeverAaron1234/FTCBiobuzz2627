@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 @Config
 public class DriveConstants {
@@ -10,13 +11,14 @@ public class DriveConstants {
   public static double d = 20;
   public static double f = 0;
 
+  public static PIDFCoefficients getPIDF() {return new PIDFCoefficients(p,i,d,f);}
+
   // PID constants for the turret
 
   // For the odometry tuning (uses angle differences in degrees)
   public static double spinP = 0.02;
   public static double spinI = 0.05;
   public static double spinD = 0.003;
-
   public static double spinFF = 0.04;
   // For the camera tuning (uses x/y positions on the camera)
   // Camera tuning isn't currently used, so values are really off.

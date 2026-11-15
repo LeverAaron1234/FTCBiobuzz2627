@@ -43,8 +43,11 @@ public class MainTeleOp extends OpMode {
   double strafe;
   double turn;
 
-  // Temporary variables
+  // Other variables
 
+  double pollenShooterVelocity;
+  double nectarShooterVelocity;
+  double intakePwr;
 
   // --- Motors / Servos / Sensors ---
   DcMotorEx intake;
@@ -69,14 +72,18 @@ public class MainTeleOp extends OpMode {
     //MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
     // --- Motors / Servos / Sensors ---
-    DcMotorEx intake = hardwareMap.get(DcMotorEx.class, "intake");
-    DcMotorEx pollenShooter = hardwareMap.get(DcMotorEx.class, "pollen");
-    DcMotorEx nectarShooter = hardwareMap.get(DcMotorEx.class, "nectar");
+    intake = hardwareMap.get(DcMotorEx.class, "intake");
+    //pollenShooter = hardwareMap.get(DcMotorEx.class, "pollen");
+    //nectarShooter = hardwareMap.get(DcMotorEx.class, "nectar");
 
     // Camera
-    Limelight3A camq = hardwareMap.get(Limelight3A.class, "limelight");
+    //Limelight3A camq = hardwareMap.get(Limelight3A.class, "limelight");
 
     // --- Variables ---
+
+    pollenShooterVelocity = 0.0;
+    nectarShooterVelocity = 0.0;
+    intakePwr = 0.0;
 
     allHubs = hardwareMap.getAll(LynxModule.class);
 
@@ -86,8 +93,8 @@ public class MainTeleOp extends OpMode {
 
     follower = Constants.create(hardwareMap);
 
-    camq.pipelineSwitch(0);
-    camq.start();
+    //camq.pipelineSwitch(0);
+    //camq.start();
 
 
     // --- Other Objects ---
@@ -98,7 +105,7 @@ public class MainTeleOp extends OpMode {
 
 
     // Prism Led
-    GoBildaPrismDriver prism = hardwareMap.get(GoBildaPrismDriver.class, "prism");
+    /*GoBildaPrismDriver prism = hardwareMap.get(GoBildaPrismDriver.class, "prism");
     prism.enableDefaultBootArtboard(false);
     final PrismAnimations.Solid OFF = new PrismAnimations.Solid();
     OFF.setPrimaryColor(0, 0, 0);
@@ -107,11 +114,11 @@ public class MainTeleOp extends OpMode {
     ON.setPrimaryColor(100, 255, 100);
     ON.setBrightness(100);
     prism.clearAllAnimations();
-    prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, OFF);
+    prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, OFF);*/
 
 
     // Command building
-    Command test = Command.build()
+    /*Command test = Command.build()
             .setExecute(() -> telemetry.addLine("Executing..."))
             .setDone(() -> gamepad1.aWasPressed())
             .setEnd(endCondition -> telemetry.addLine("Done!"));
@@ -124,7 +131,7 @@ public class MainTeleOp extends OpMode {
     Scheduler.schedule(sequential(
         test,
         instantTest
-    ));
+    ));*/
 
 
     telemetry.update();
@@ -158,19 +165,23 @@ public class MainTeleOp extends OpMode {
       module.clearBulkCache();
     }
 
-    if (gamepad1.right_trigger >= 0.2) {
-      pollenShooter.setVelocity(2800.0);
-    }
-    else {
-      pollenShooter.setVelocity(0.0);
+    if (gamepad1.dpadUpWasPressed()) {
+      pollenShooterVelocity = Math.min(pollenShooterVelocity + 200, 2800.0);
     }
 
-    if (gamepad1.left_trigger >= 0.2) {
-      nectarShooter.setVelocity(2800.0);
+    if (gamepad1.dpadDownWasPressed()) {
+      pollenShooterVelocity = Math.max(pollenShooterVelocity - 200, 0.0);
     }
-    else {
-      nectarShooter.setVelocity(0.0);
+
+    if (gamepad1.dpadRightWasPressed()) {
+      nectarShooterVelocity = Math.min(pollenShooterVelocity + 200, 2800.0);
     }
+
+    if (gamepad1.dpadLeftWasPressed()) {
+      nectarShooterVelocity = Math.max(pollenShooterVelocity - 200, 0.0);
+    }
+
+    intakePwr = gamepad1.right_trigger - gamepad1.left_trigger;
 
     TelemetryPacket packet = new TelemetryPacket();
     driveVar = -gamepad1.left_stick_y;
@@ -178,7 +189,7 @@ public class MainTeleOp extends OpMode {
     turn = -gamepad1.right_stick_x;
 
     follower.update();
-    Scheduler.execute(); // Off with his head!
+    Scheduler.execute();
 
 
     // --- CALCULATIONS ---
@@ -201,12 +212,23 @@ public class MainTeleOp extends OpMode {
 
     ManualDrive.driveOrHold(follower, powers);
 
+    //pollenShooter.setVelocity(pollenShooterVelocity);
+    //nectarShooter.setVelocity(nectarShooterVelocity);
+    intake.setVelocity(2800 * intakePwr);
+
 
     // Debug stuff (please ignore)
     /*if ((DriveConstants.p != shooter.getPID().p) || (DriveConstants.i != shooter.getPID().i) || (DriveConstants.d != shooter.getPID().d)) {
       shooter.resetPID(DriveConstants.p,DriveConstants.i,DriveConstants.d);
     }*/
-
+    String drivetrainLog = follower.debug().drivetrain().toString();
+    String algorithmLog = follower.debug().algorithm().toString();
+    String localizerLog = follower.debug().localizer().toString();
+    String followStateLog = follower.debug().followState().toString();
+    telemetry.addLine("DriveTrain\n"+drivetrainLog+"\n");
+    telemetry.addLine("Algorithm\n"+algorithmLog+"\n");
+    telemetry.addLine("Localizer\n"+localizerLog+"\n");
+    telemetry.addLine("Follow State\n"+followStateLog+"\n");
     telemetry.update();
   }
 
