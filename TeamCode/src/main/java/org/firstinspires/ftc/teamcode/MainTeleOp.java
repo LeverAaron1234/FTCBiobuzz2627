@@ -73,8 +73,8 @@ public class MainTeleOp extends OpMode {
 
     // --- Motors / Servos / Sensors ---
     intake = hardwareMap.get(DcMotorEx.class, "intake");
-    //pollenShooter = hardwareMap.get(DcMotorEx.class, "pollen");
-    //nectarShooter = hardwareMap.get(DcMotorEx.class, "nectar");
+    pollenShooter = hardwareMap.get(DcMotorEx.class, "pollenFlywheel");
+    nectarShooter = hardwareMap.get(DcMotorEx.class, "nectarFlywheel");
 
     // Camera
     //Limelight3A camq = hardwareMap.get(Limelight3A.class, "limelight");
@@ -211,8 +211,8 @@ public class MainTeleOp extends OpMode {
 
     ManualDrive.driveOrHold(follower, powers);
 
-    //pollenShooter.setVelocity(pollenShooterVelocity);
-    //nectarShooter.setVelocity(nectarShooterVelocity);
+    pollenShooter.setVelocity(pollenShooterVelocity);
+    nectarShooter.setVelocity(nectarShooterVelocity);
     intake.setVelocity(2800 * intakePwr);
 
 
