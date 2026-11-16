@@ -165,21 +165,20 @@ public class MainTeleOp extends OpMode {
       module.clearBulkCache();
     }
 
-    if (gamepad1.dpadUpWasPressed()) {
-      pollenShooterVelocity = Math.min(pollenShooterVelocity + 200, 2800.0);
-    }
+    pollenShooterVelocity =
+            Math.max(
+                    Math.min(
+                        pollenShooterVelocity + ((gamepad1.dpadUpWasPressed())? 200 : 0) - ((gamepad1.dpadDownWasPressed())? 200 : 0),
+                        2800.0),
+                    0.0);
 
-    if (gamepad1.dpadDownWasPressed()) {
-      pollenShooterVelocity = Math.max(pollenShooterVelocity - 200, 0.0);
-    }
 
-    if (gamepad1.dpadRightWasPressed()) {
-      nectarShooterVelocity = Math.min(pollenShooterVelocity + 200, 2800.0);
-    }
-
-    if (gamepad1.dpadLeftWasPressed()) {
-      nectarShooterVelocity = Math.max(pollenShooterVelocity - 200, 0.0);
-    }
+    nectarShooterVelocity =
+            Math.max(
+                Math.min(
+                    nectarShooterVelocity + ((gamepad1.dpadRightWasPressed())? 200 : 0) - ((gamepad1.dpadLeftWasPressed())? 200 : 0),
+                    2800.0),
+                0.0);
 
     intakePwr = gamepad1.right_trigger - gamepad1.left_trigger;
 
