@@ -23,6 +23,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Prism.GoBildaPrismDriver;
 import org.firstinspires.ftc.teamcode.Prism.PrismAnimations;
 import org.firstinspires.ftc.teamcode.appendages.Shooter;
+import org.firstinspires.ftc.teamcode.codersToolbox.LevisFunctions;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 import java.util.ArrayList;
@@ -224,10 +225,19 @@ public class MainTeleOp extends OpMode {
     String algorithmLog = follower.debug().algorithm().toString();
     String localizerLog = follower.debug().localizer().toString();
     String followStateLog = follower.debug().followState().toString();
+    /*
     telemetry.addLine("DriveTrain\n"+drivetrainLog+"\n");
     telemetry.addLine("Algorithm\n"+algorithmLog+"\n");
     telemetry.addLine("Localizer\n"+localizerLog+"\n");
     telemetry.addLine("Follow State\n"+followStateLog+"\n");
+     */
+    telemetry.addLine("Flywheel Speeds:");
+    telemetry.addData("  Pollen RPM", pollenShooterVelocity*(60/28));
+    telemetry.addData("  Nectar RPM", nectarShooterVelocity*(60/28));
+    telemetry.addLine("Position:");
+    telemetry.addData("  X", LevisFunctions.round(follower.localizer.pose().x(), 3));
+    telemetry.addData("  Y", LevisFunctions.round(follower.localizer.pose().y(), 3));
+    telemetry.addData("  Heading", LevisFunctions.round(follower.localizer.pose().heading(), 3));
     telemetry.update();
   }
 
